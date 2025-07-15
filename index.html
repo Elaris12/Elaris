@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Elaris - Inspirado pelos deuses, criado para deusas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap" rel="stylesheet" />
+<style>
+/* Reset & base */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 100%; }
+body {
+font-family: 'Montserrat', sans-serif;
+background-image: url('fundo-grego.png');
+background-repeat: no-repeat;
+background-size: cover;
+background-position: center center;
+background-attachment: fixed;
+color: #4a3c31;
+line-height: 1.6;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+position: relative;
+}
+body::before {
+content: ''; position: fixed; top: 0; left: 0;
+width: 100%; height: 100%;
+background-color: rgba(255, 255, 255, 0.7);
+z-index: -1;
+}
+a { color: #d68c45; text-decoration: none; transition: color 0.3s ease; }
+a:hover { color: #b37027; }
+h1, h2, h3, h4 {
+font-family: 'Playfair Display', serif;
+color: #804000;
+margin-bottom: 0.6rem;
+}
+h1 { font-size: 2.6rem; letter-spacing: 0.07em; }
+h2 { font-size: 1.8rem; letter-spacing: 0.04em; }
+p { margin-bottom: 1rem; }
+.container { width: 90%; max-width: 68.75rem; margin: 0 auto; flex: 1; }
+header {
+background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+padding: 1rem 0;
+box-shadow: 0 0.25rem 0.5rem rgba(246, 211, 101, 0.3);
+position: sticky; top: 0; z-index: 999;
+}
+.nav-container { display: flex; justify-content: space-between; align-items: center; }
+.logo {
+font-family: 'Playfair Display', serif; font-size: 1.9rem;
+font-weight: 700; color: #5a3b00; letter-spacing: 0.1em;
+}
+nav ul { list-style: none; display: flex; gap: 1.5rem; }
+nav ul li button {
+background: none; border: none; font-size: 1rem; cursor: pointer;
+font-family: inherit; color: #5a3b00;
+padding: 0.25rem 0.5rem; border-radius: 0.3125rem;
+transition: background-color 0.3s ease, color 0.3s ease;
+}
+nav ul li button:hover { background-color: #d68c45; color: #fff7f0; }
+.slogan {
+text-align: center; font-family: 'Playfair Display', serif;
+font-size: 1.3rem; color: #804000;
+margin: 1rem 0 2rem; font-style: italic; font-weight: 600;
+}
+section { display: none; padding-bottom: 3rem; }
+section.active { display: block; animation: fadeIn 0.5s ease forwards; }
+@keyframes fadeIn { from {opacity: 0; transform: translateY(1rem);} to {opacity: 1; transform: translateY(0);} }
+#home .hero {
+background: url('imagens/hero.jpg') center/cover no-repeat;
+height: 18.75rem; border-radius: 0.75rem; position: relative;
+box-shadow: 0 0.5rem 1rem rgba(246,211,101,0.3);
+display: flex; align-items: center; justify-content: center;
+color: #fff; text-shadow: 0.0625rem 0.0625rem 0.375rem rgba(0,0,0,0.6);
+font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700;
+}
+#home .hero::after {
+content: ''; position: absolute; inset: 0;
+background: linear-gradient(180deg, rgba(214,140,69,0.75) 0%, rgba(253,160,133,0.75) 100%);
+border-radius: 0.75rem; z-index: 0;
+}
+#home .hero span { position: relative; z-index: 1; }
+.welcome-banner {
+background-color: #804000; color: #fff7f0;
+padding: 1.5rem 2rem; border-radius: 0.75rem;
+margin: 2rem auto; text-align: center;
+box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+max-width: 43.75rem;
+}
+.welcome-banner p { margin-bottom: 0; font-size: 1.1rem; }
+/* ===== NOVO ESTILO PARA O TÍTULO DO CARROSSEL ===== */
+.section-title {
+    text-align: center;
+    margin: 3rem 0 1.5rem;
+}
+
+.carousel-container {
+  position: relative; width: 100%; max-width: 31.25rem;
+  margin: 2rem auto 3rem; overflow: hidden;
+  border-radius: 0.75rem; box-shadow: 0 0.3125rem 0.9375rem rgba(214,140,69,0.3);
+  aspect-ratio: 3 / 4; display: flex; align-items: center;
+}
+.carousel-track { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
+.carousel-track img { width: 100%; height: 100%; flex-shrink: 0; object-fit: contain; }
+.carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(214,140,69,0.6); color: #fff7f0;
+  border: none; font-size: 2rem; padding: 0.3rem 0.8rem;
+  cursor: pointer; border-radius: 50%; z-index: 10;
+  transition: background 0.3s ease;
+}
+.carousel-btn:hover { background: rgba(179,112,39,0.8); }
+.carousel-btn.left { left: 0.625rem; }
+.carousel-btn.right { right: 0.625rem; }
+#produtos h2, #sobre h2, #carrinho h2 { text-align: center; margin-bottom: 1.5rem; }
+.filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
+.filter-btn {
+  background-color: transparent; border: 2px solid #d68c45;
+  border-radius: 1.875rem; padding: 0.5rem 1.2rem;
+  font-family: 'Montserrat', sans-serif; font-weight: 600;
+  color: #804000; cursor: pointer; transition: all 0.3s ease;
+}
+.filter-btn:hover { background-color: #f6d365; border-color: #f6d365; }
+.filter-btn.active { background-color: #804000; border-color: #804000; color: #fff7f0; }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr));
+    gap: 2rem;
+    justify-content: center;
+}
+.card-produto {
+  background: #fff; border-radius: 0.75rem; box-shadow: 0 0.1875rem 0.5rem rgba(214,140,69,0.15);
+  padding: 1rem; text-align: center; display: flex; flex-direction: column;
+  justify-content: space-between; transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 18rem;
+}
+.card-produto:hover { transform: translateY(-0.375rem); box-shadow: 0 0.625rem 1.5625rem rgba(214,140,69,0.4); }
+.card-produto img {
+  width: 100%; border-radius: 0.625rem; aspect-ratio: 1/1;
+  object-fit: cover; margin-bottom: 1rem; cursor: pointer;
+}
+.card-produto h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #804000; margin-bottom: 0.4rem; }
+.card-produto .preco { font-weight: 700; color: #b36600; margin-bottom: 1rem; }
+.action-btn, .action-btn-secondary {
+  border: none; padding: 0.6rem 1rem; border-radius: 1.875rem;
+  font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+  text-decoration: none; font-size: 1rem;
+}
+.action-btn {
+  background: linear-gradient(90deg, #d68c45, #f6d365); color: #fff7f0;
+}
+.action-btn:hover {
+  background: linear-gradient(90deg, #b37027, #d68c45);
+  box-shadow: 0 0.375rem 0.875rem rgba(179,112,39,0.9);
+}
+#cart-items-container { max-width: 43.75rem; margin: 0 auto; }
+.cart-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: #fff; padding: 1rem; border-radius: 0.5rem;
+    margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.cart-item img { width: 4rem; height: 4rem; border-radius: 0.25rem; margin-right: 1rem; }
+.cart-item-info { flex-grow: 1; }
+.cart-item-info h4 { margin-bottom: 0.2rem; }
+.cart-item-actions button {
+    background: #e0e0e0; color: #555; border: none;
+    padding: 0.4rem 0.8rem; border-radius: 0.25rem; cursor: pointer;
+    font-weight: bold; transition: background-color 0.3s ease;
+}
+.cart-item-actions button:hover { background-color: #f2a0a0; color: white; }
+#cart-summary {
+    max-width: 43.75rem; margin: 2rem auto 0; text-align: right;
+    border-top: 2px solid #f6d365; padding-top: 1rem;
+}
+#cart-summary .total { font-size: 1.5rem; font-weight: bold; color: #804000; margin-bottom: 1rem;}
+#cart-actions { display: flex; justify-content: flex-end; gap: 1rem; }
+#cart-actions button {
+    border-radius: 1.875rem; padding: 0.6rem 1.2rem; font-weight: 600;
+    cursor: pointer; transition: all 0.3s ease; font-size: 1rem;
+}
+#clear-cart-btn { background-color: transparent; border: 2px solid #804000; color: #804000; }
+#clear-cart-btn:hover { background-color: #804000; color: #fff; }
+#checkout-btn { background: #804000; border: 2px solid #804000; color: #fff; }
+#checkout-btn:hover { opacity: 0.8; }
+#sobre article { max-width: 43.75rem; margin: 0 auto; font-size: 1.1rem; color: #804000; line-height: 1.7; text-align: center; }
+#sobre form { max-width: 30rem; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 1rem; }
+#sobre form label { font-weight: 600; color: #804000; text-align: left; }
+#sobre form input, #sobre form textarea { padding: 0.6rem 1rem; border-radius: 0.5rem; border: 0.0938rem solid #d68c45; font-size: 1rem; resize: vertical; transition: border-color 0.3s ease; }
+#sobre form input:focus, #sobre form textarea:focus { border-color: #b37027; outline: none; }
+#sobre form button[type="submit"] { align-self: center; }
+footer { background: #f6d365; text-align: center; padding: 1.5rem 1rem; color: #5a3b00; box-shadow: 0 -0.1875rem 0.625rem rgba(246,211,101,0.3); margin-top: auto; }
+.footer-contato { margin-top: 0.8rem; display: flex; justify-content: center; gap: 1.5rem; font-size: 0.9rem; }
+.footer-contato a { color: #804000; font-weight: 600; }
+.footer-contato a:hover { color: #b37027; }
+
+.modal {
+    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+    width: 100%; height: 100%; overflow: auto;
+    background-color: rgba(0,0,0,0.6); animation: fadeInModal 0.4s;
+}
+@keyframes fadeInModal { from {opacity: 0;} to {opacity: 1;} }
+
+.modal-content {
+    background-color: #fff7f0; margin: 10% auto; padding: 2.5rem;
+    border-radius: 0.75rem; width: 90%;
+    text-align: center; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+/* Estilo específico para o novo modal de sucesso */
+#success-modal .modal-content {
+    max-width: 28rem;
+    font-size: 1.2rem;
+    color: #804000;
+}
+#product-modal .modal-content { max-width: 35rem; }
+#confirm-modal .modal-content { max-width: 25rem; }
+.modal-content img { width: 100%; max-width: 18rem; height: auto; border-radius: 0.5rem; margin-bottom: 1rem; }
+.modal-content h3 { font-size: 2rem; }
+.modal-content .preco { font-size: 1.5rem; margin-bottom: 0.5rem; }
+#modal-description { font-size: 0.95rem; color: #4a3c31; max-width: 90%; margin: 0 auto 1rem; }
+#modal-size-selector-container { display: none; margin: 0.5rem 0 1rem 0; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600; }
+#modal-size-select { padding: 0.4rem; border-radius: 0.25rem; border: 1px solid #d68c45; }
+.close-btn {
+    position: absolute; top: 0.5rem; right: 1.2rem;
+    color: #aaa; font-size: 2.5rem; font-weight: bold; cursor: pointer;
+}
+.close-btn:hover { color: #333; }
+
+.confirm-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+.action-btn-secondary { background: transparent; border: 2px solid #804000; color: #804000; }
+.action-btn-secondary:hover { background: #804000; color: #fff; }
+
+#toast {
+  visibility: hidden; min-width: 250px; background-color: #804000; color: #fff;
+  text-align: center; border-radius: 0.5rem; padding: 1rem;
+  position: fixed; z-index: 1001; left: 50%; transform: translateX(-50%);
+  bottom: 2rem; font-size: 1rem;
+  transition: visibility 0.5s, opacity 0.5s linear;
+  opacity: 0;
+}
+#toast.show { visibility: visible; opacity: 1; }
+</style>
+</head>
+<body>
+<header>
+<div class="nav-container container">
+<div class="logo">ELARIS</div>
+<nav>
+<ul>
+<li><button onclick="showSection('home')">Início</button></li>
+<li><button onclick="showSection('sobre')">Sobre</button></li>
+<li><button onclick="showSection('produtos')">Produtos</button></li>
+<li><button onclick="showSection('carrinho')">Carrinho</button></li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="container">
+<div class="slogan">Inspirado pelos deuses, criado para deusas</div>
+<section id="home" class="active">
+<div class="hero"><span>Brilhe como uma deusa</span></div>
+<div class="welcome-banner"><p>Bem-vinda à Elaris, onde a elegância e o poder das deusas gregas se encontram em cada peça. Descubra semijoias únicas para realçar sua beleza.</p></div>
+<!-- ===== TÍTULO ADICIONADO AQUI ===== -->
+  <h2 class="section-title">Lançamentos Futuros</h2>
+
+  <div class="carousel-container">
+    <button class="carousel-btn left">❮</button>
+    <div class="carousel-track">
+      <img src="carrossel/coisinha do braço ouro.jpg" alt="Imagem 1" /><img src="carrossel/pulseira ouro.jpg" alt="Imagem 2" /><img src="carrossel/brinco e colar ouro.jpg" alt="Imagem 3" /><img src="carrossel/brinco e colar prata.jpg" alt="Imagem 4" /><img src="carrossel/brinco ouro.jpg" alt="Imagem 5" />
+    </div>
+    <button class="carousel-btn right">❯</button>
+  </div>
+</section>
+
+<section id="produtos">
+  <h2>Nossos Produtos</h2>
+  <div class="filter-container">
+    <button class="filter-btn active" data-filter="all">Mostrar Todos</button><button class="filter-btn" data-filter="anel">Anéis</button><button class="filter-btn" data-filter="cordao">Cordões</button><button class="filter-btn" data-filter="pulseira">Pulseiras e Braceletes</button><button class="filter-btn" data-filter="brinco">Brincos</button>
+  </div>
+  <div class="grid">
+
+    <!-- === INÍCIO DA CORREÇÃO - IDs únicos para cada produto === -->
+
+    <div class="card-produto anel" data-id="1" data-description="Anel em Prata 925 com design de medusa." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/anel medusa prata.jpg" alt="anel medusa prata" /><h3>anel medusa prata</h3><div class="preco">R$ 49,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="2" data-description="Anel banhado a ouro com design de medusa." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/anel medusa oura.jpg" alt="anel medusa oura" /><h3>anel medusa oura</h3><div class="preco">R$ 49,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="3" data-description="Anel em Prata 925 com design de infinito, simbolizando eternidade e amor." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/Anel de infinito prata.jpg" alt="Anel Infinito Prata" /><h3>Anel Infinito Prata</h3><div class="preco">R$ 49,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="4" data-description="Anel banhado a ouro inspirado na deusa Afrodite." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/anel ouro afrodite.jpg" alt="anel ouro afrodite" /><h3>anel ouro afrodite</h3><div class="preco">R$ 49,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="5" data-description="Anel em Prata 925, inspirado na sabedoria e força da deusa Athena." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/Anel athena prata.jpg" alt="Anel Athena Prata" /><h3>Anel Athena Prata</h3><div class="preco">R$ 59,99</div><button class="action-btn">Visualizar</button></div>
+  
+    <div class="card-produto anel" data-id="6" data-description="Anel em Prata 925, inspirado na beleza da deusa Afrodite." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/anel prata afrodite.jpg" alt="anel prata afrodite" /><h3>anel prata afrodite</h3><div class="preco">R$ 59,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="7" data-description="Anel banhado a Ouro 18k, inspirado na sabedoria e força da deusa Athena." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/Anel athena ouro.jpg" alt="Anel Athena Ouro" /><h3>Anel Athena Ouro</h3><div class="preco">R$ 69,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="8" data-description="Anel banhado a Ouro 18k com formato de coração, cravejado com microzircônias." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/anel de coração.png" alt="Anel de Coração" /><h3>Anel de Coração</h3><div class="preco">R$ 55,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="9" data-description="Anel banhado a Ouro 18k com o símbolo do feminino. Um tributo à força da mulher." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/anel mulher ouro.jpg" alt="Anel Símbolo Feminino Ouro" /><h3>Anel Símbolo Feminino Ouro</h3><div class="preco">R$ 49,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto anel" data-id="10" data-description="Anel em Prata 925 com o símbolo do feminino. Um tributo à força da mulher." data-sizes="11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33"><img src="produtos/anel mulher prata.jpg" alt="Anel Símbolo Feminino Prata" /><h3>Anel Símbolo Feminino Prata</h3><div class="preco">R$ 49,99</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto brinco" data-id="11" data-description="Brinco em prata com design da Medusa."><img src="produtos/brinco medusa prata.jpg" alt="brinco medusa prata" /><h3>brinco medusa prata</h3><div class="preco">R$ 99,90</div><button class="action-btn">Visualizar</button></div>
+ 
+    <div class="card-produto brinco" data-id="12" data-description="Brinco banhado a ouro com design da Medusa."><img src="produtos/brinco medusa ouro.jpg" alt="brinco medusa ouro" /><h3>brinco medusa ouro</h3><div class="preco">R$ 99,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto brinco" data-id="13" data-description="Brinco banhado a ouro inspirado na deusa Afrodite."><img src="produtos/brinco afrodite ouro.jpg" alt="brinco afrodite ouro" /><h3>brinco afrodite ouro</h3><div class="preco">R$ 99,90</div><button class="action-btn">Visualizar</button></div>
+
+     <div class="card-produto brinco" data-id="14" data-description="Brinco em prata inspirado na deusa Afrodite."><img src="produtos/brinco prata afrodite.jpg" alt="brinco prata afrodite" /><h3>brinco prata afrodite</h3><div class="preco">R$ 99,90</div><button class="action-btn">Visualizar</button></div>
+
+     <div class="card-produto brinco" data-id="15" data-description="Brinco banhado a ouro inspirado na deusa Athena."><img src="produtos/brinco athena ouro.jpg" alt="brinco athena ouro" /><h3>brinco athena ouro</h3><div class="preco">R$ 99,90</div><button class="action-btn">Visualizar</button></div>
+
+     <div class="card-produto brinco" data-id="16" data-description="Brinco em prata inspirado na deusa Athena."><img src="produtos/brinco athena prata.jpg" alt="brinco athena prata" /><h3>brinco athena prata</h3><div class="preco">R$ 99,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="17" data-description="Cordão banhado a Ouro 18k, inspirado na deusa Athena." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/cordao athena ouro.jpg" alt="cordao athena ouro" /><h3>cordao athena ouro</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="18" data-description="Colar em prata com pingente da Medusa." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/Colar medusa prata.jpg" alt="Colar medusa prata" /><h3>Colar medusa prata</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="19" data-description="Colar banhado a ouro com pingente da Medusa." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/Colar medusa ouro.jpg" alt="Colar medusa ouro" /><h3>Colar medusa ouro</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="20" data-description="Colar inspirado na deusa Afrodite, com materiais mistos." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/colar mestiço afrodite.png" alt="colar mestiço afrodite" /><h3>colar mestiço afrodite</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="21" data-description="Cordão em prata inspirado na deusa Athena." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/cordao athena.jpg" alt="cordao athena" /><h3>cordao prata athena</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="22" data-description="Colar em prata com um design alternativo da Medusa." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/colar medusa prata 2.jpg" alt="colar medusa prata 2" /><h3>colar medusa prata</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="23" data-description="Colar banhado a ouro com um design alternativo da Medusa." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/colar medusa ouro 2.jpg" alt="colar medusa ouro 2" /><h3>colar medusa ouro</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="24" data-description="Colar em prata inspirado na deusa Athena." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/colar athena prata.jpg" alt="colar athena prata" /><h3>colar athena prata</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="25" data-description="Colar banhado a ouro inspirado na deusa Athena." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/colar athena ouro.jpg" alt="colar athena ouro" /><h3>colar athena ouro</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="26" data-description="Colar em prata inspirado na deusa Afrodite." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/colar afrodite prata.jpg" alt="colar afrodite prata" /><h3>colar afrodite prata</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto cordao" data-id="27" data-description="Colar banhado a ouro inspirado na deusa Afrodite." data-sizes="20cm,25cm,30cm,35cm,40cm,45cm,50cm,55cm,60cm,65cm,70cm"><img src="produtos/colar afrodite ouro.jpg" alt="colar afrodite ouro" /><h3>colar afrodite ouro</h3><div class="preco">R$ 189,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto pulseira" data-id="28" data-description="Bracelete banhado a ouro inspirado em Athena."><img src="produtos/bracelete ouro athena.jpg" alt="bracelete ouro athena" /><h3>bracelete ouro athena</h3><div class="preco">R$ 149,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto pulseira" data-id="29" data-description="Bracelete em prata inspirado em Athena."><img src="produtos/bracelete prata athena.jpg" alt="bracelete prata athena" /><h3>bracelete prata athena</h3><div class="preco">R$ 149,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto pulseira" data-id="30" data-description="Bracelete duplo inspirado na deusa Afrodite."><img src="produtos/bracelete duplo.jpg" alt="bracelete duplo" /><h3>bracelete duplo</h3><div class="preco">R$ 149,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto pulseira" data-id="31" data-description="Bracelete banhado a ouro com design da Medusa."><img src="produtos/bracelete medusa ouro.jpg" alt="bracelete medusa ouro" /><h3>bracelete medusa ouro</h3><div class="preco">R$ 149,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto pulseira" data-id="32" data-description="Bracelete em prata com design da Medusa."><img src="produtos/bracelete medusa prata.jpg" alt="bracelete medusa prata" /><h3>bracelete medusa prata</h3><div class="preco">R$ 149,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto pulseira" data-id="33" data-description="Bracelete banhado a ouro inspirado em Afrodite."><img src="produtos/bracelete afrodite ouro.jpg" alt="bracelete afrodite ouro" /><h3>bracelete afrodite ouro</h3><div class="preco">R$ 149,90</div><button class="action-btn">Visualizar</button></div>
+
+    <div class="card-produto pulseira" data-id="34" data-description="Bracelete em prata inspirado em Afrodite."><img src="produtos/bracelete afrodite prata.jpg" alt="bracelete afrodite prata" /><h3>bracelete afrodite prata</h3><div class="preco">R$ 149,90</div><button class="action-btn">Visualizar</button></div>
+
+    <!-- === FIM DA CORREÇÃO === -->
+
+  </div>
+</section>
+
+<section id="carrinho">
+  <h2>Seu Carrinho</h2>
+  <div id="cart-items-container"></div>
+</section>
+
+<section id="sobre">
+  <article>
+    <h2>Sobre a Elaris</h2>
+    <p>A Elaris nasceu do desejo de valorizar a beleza e a força feminina por meio de peças únicas e significativas, conectando propósito, estética e identidade. A fundadora observou que muitas mulheres buscavam acessórios que fossem mais do que ornamentos, mas símbolos de autoestima, superação e expressão pessoal. Inspirada pela energia das pedras naturais e pela arte manual, a marca foi criada para oferecer joias autorais acessíveis, de qualidade e com propósito, tornando cada peça um lembrete diário de força e beleza.</p>
+  </article>
+  <form>
+    <h2>Fale Conosco</h2>
+    <label for="nome">Nome</label><input type="text" id="nome" name="nome" required />
+    <label for="email">Email</label><input type="email" id="email" name="email" required />
+    <label for="mensagem">Mensagem</label><textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+    <button type="submit" class="action-btn">Enviar</button>
+  </form>
+</section>
+</div>
+<footer>
+<p>© 2025 Elaris. Todos os direitos reservados.</p>
+<div class="footer-contato">
+<a href="#" target="_blank">Instagram: @elaris_joias</a>
+<a href="mailto:empresaelaris@gmail.com">Email: empresaelaris@gmail.com</a>
+</div>
+</footer>
+<div id="product-modal" class="modal">
+<div class="modal-content">
+<span class="close-btn">×</span>
+<img id="modal-img" src="" alt="Imagem do Produto" />
+<h3 id="modal-title"></h3>
+<p id="modal-price" class="preco"></p>
+<p id="modal-description"></p>
+<div id="modal-size-selector-container">
+<label for="modal-size-select">Tamanho:</label>
+<select id="modal-size-select"></select>
+</div>
+<button id="modal-add-to-cart-btn" class="action-btn">Adicionar ao Carrinho</button>
+</div>
+</div>
+<div id="confirm-modal" class="modal">
+<div class="modal-content">
+<p id="confirm-text"></p>
+<div class="confirm-actions">
+<button id="confirm-yes-btn" class="action-btn">Sim</button>
+<button id="confirm-no-btn" class="action-btn-secondary">Não</button>
+</div>
+</div>
+</div>
+<!-- NOVO MODAL DE SUCESSO DO FORMULÁRIO -->
+<div id="success-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">×</span>
+        <p>Email enviado com sucesso, aguarde nosso retorno😊</p>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+let cart = [];
+
+function showSection(id) {
+document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+const sec = document.getElementById(id);
+if (sec) sec.classList.add('active');
+if (id === 'carrinho') renderCart();
+}
+
+function showToast(message) {
+const toast = document.getElementById("toast");
+toast.textContent = message;
+toast.className = "show";
+setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+}
+
+function addToCart(product, size = null) {
+// A lógica aqui agora funcionará corretamente porque o `product.id` será único.
+// Se um tamanho for selecionado, ele cria um ID ainda mais específico (ex: "1-12", "2-12"),
+// o que permite adicionar o mesmo anel com tamanhos diferentes como itens separados.
+const cartItemId = size ? `${product.id}-${size}` : product.id;
+const existingItem = cart.find(item => item.id === cartItemId);
+
+if (existingItem) {
+existingItem.quantity++;
+} else {
+const cartItem = {
+...product,
+id: cartItemId, // Usa o ID combinado (produto + tamanho) ou apenas o do produto
+size: size,
+quantity: 1
+};
+cart.push(cartItem);
+}
+
+let toastMessage = `${product.name}`;
+if(size) {
+toastMessage += ` (Tamanho: ${size})`;
+}
+toastMessage += ` foi adicionado ao carrinho!`;
+showToast(toastMessage);
+// Atualiza a visualização do carrinho sempre que um item é adicionado
+renderCart();
+}
+
+function removeFromCart(productId) {
+cart = cart.filter(item => item.id !== productId);
+renderCart();
+}
+
+function clearCart() {
+showConfirmDialog("Tem certeza que deseja limpar o carrinho?", () => {
+cart = [];
+renderCart();
+showToast("Carrinho esvaziado!");
+});
+}
+
+function checkout() {
+if (cart.length === 0) {
+showToast("Seu carrinho está vazio.");
+return;
+}
+showConfirmDialog("Deseja finalizar a sua compra?", () => {
+showToast("Compra finalizada com sucesso! Agradecemos a sua preferência.");
+cart = [];
+renderCart();
+});
+}
+
+function renderCart() {
+const cartContainer = document.getElementById('cart-items-container');
+cartContainer.innerHTML = '';
+const cartSection = document.getElementById('carrinho');
+const summaryInCartSection = cartSection.querySelector('#cart-summary');
+
+// Se houver um sumário antigo, remove para não duplicar
+if(summaryInCartSection) {
+    summaryInCartSection.remove();
+}
+
+if (cart.length === 0) {
+cartContainer.innerHTML = '<p style="text-align: center;">Seu carrinho está vazio.</p>';
+document.querySelector('#carrinho h2').textContent = 'Seu Carrinho';
+return;
+}
+
+let total = 0;
+let totalItems = 0;
+const itemsDiv = document.createElement('div');
+
+cart.forEach(item => {
+const itemElement = document.createElement('div');
+itemElement.className = 'cart-item';
+const priceNumber = parseFloat(item.price.replace('R$ ', '').replace(',', '.'));
+total += priceNumber * item.quantity;
+totalItems += item.quantity;
+
+let itemName = item.name;
+if (item.size) {
+itemName += ` <span style="color: #888; font-size: 0.9em;">(Tamanho: ${item.size})</span>`;
+}
+
+itemElement.innerHTML = `
+<img src="${item.imgSrc}" alt="${item.name}">
+<div class="cart-item-info">
+<h4>${itemName}</h4>
+<p>${item.price} x ${item.quantity}</p>
+</div>
+<div class="cart-item-actions">
+<button onclick="removeFromCart('${item.id}')">Remover</button>
+</div>`;
+itemsDiv.appendChild(itemElement);
+});
+
+document.querySelector('#carrinho h2').textContent = `Seu Carrinho (${totalItems} ${totalItems > 1 ? 'itens' : 'item'})`;
+
+const summaryDiv = document.createElement('div');
+summaryDiv.id = 'cart-summary';
+summaryDiv.innerHTML = `
+<div class="total">Total: R$ ${total.toFixed(2).replace('.', ',')}</div>
+<div id="cart-actions">
+<button id="clear-cart-btn">Limpar Carrinho</button>
+<button id="checkout-btn">Finalizar Compra</button>
+</div>`;
+
+cartContainer.appendChild(itemsDiv);
+// Adiciona o sumário ao final da seção do carrinho, fora do container de itens
+cartSection.appendChild(summaryDiv);
+
+document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
+document.getElementById('checkout-btn').addEventListener('click', checkout);
+}
+
+const productModal = document.getElementById('product-modal');
+const confirmModal = document.getElementById('confirm-modal');
+const successModal = document.getElementById('success-modal');
+const closeBtn = productModal.querySelector('.close-btn');
+const successCloseBtn = successModal.querySelector('.close-btn');
+
+
+closeBtn.onclick = () => productModal.style.display = 'none';
+successCloseBtn.onclick = () => successModal.style.display = 'none';
+
+window.onclick = (event) => {
+if (event.target == productModal) productModal.style.display = 'none';
+if (event.target == confirmModal) confirmModal.style.display = 'none';
+if (event.target == successModal) successModal.style.display = 'none';
+};
+
+function openProductModal(product) {
+productModal.querySelector('#modal-img').src = product.imgSrc;
+productModal.querySelector('#modal-title').textContent = product.name;
+productModal.querySelector('#modal-price').textContent = product.price;
+productModal.querySelector('#modal-description').textContent = product.description || '';
+
+const sizeSelectorContainer = productModal.querySelector('#modal-size-selector-container');
+const sizeSelect = productModal.querySelector('#modal-size-select');
+sizeSelect.innerHTML = '';
+
+if (product.sizes) {
+const sizesArray = product.sizes.split(',');
+sizesArray.forEach(size => {
+const option = document.createElement('option');
+option.value = size;
+option.textContent = size;
+sizeSelect.appendChild(option);
+});
+sizeSelectorContainer.style.display = 'flex';
+} else {
+sizeSelectorContainer.style.display = 'none';
+}
+
+productModal.querySelector('#modal-add-to-cart-btn').onclick = () => {
+const selectedSize = product.sizes ? sizeSelect.value : null;
+addToCart(product, selectedSize);
+productModal.style.display = 'none';
+};
+productModal.style.display = 'block';
+}
+
+function showConfirmDialog(message, onConfirm) {
+confirmModal.querySelector('#confirm-text').textContent = message;
+confirmModal.querySelector('#confirm-yes-btn').onclick = () => {
+confirmModal.style.display = 'none';
+onConfirm();
+};
+confirmModal.querySelector('#confirm-no-btn').onclick = () => confirmModal.style.display = 'none';
+confirmModal.style.display = 'block';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+document.querySelectorAll('.card-produto').forEach(card => {
+const product = {
+id: card.dataset.id,
+name: card.querySelector('h3').textContent,
+price: card.querySelector('.preco').textContent,
+imgSrc: card.querySelector('img').src,
+description: card.dataset.description,
+sizes: card.dataset.sizes
+};
+card.querySelector('.action-btn').onclick = () => openProductModal(product);
+card.querySelector('img').onclick = () => openProductModal(product);
+});
+
+const track = document.querySelector('.carousel-track'), btnLeft = document.querySelector('.carousel-btn.left'), btnRight = document.querySelector('.carousel-btn.right');
+let currentSlide = 0;
+function moveCarousel(index) {
+const slides = track.children, totalSlides = slides.length;
+if (index >= totalSlides) index = 0;
+if (index < 0) index = totalSlides - 1;
+currentSlide = index;
+if(track.parentElement) {
+track.style.transform = `translateX(-${track.parentElement.clientWidth * currentSlide}px)`;
+}
+}
+btnLeft.addEventListener('click', () => moveCarousel(currentSlide - 1));
+btnRight.addEventListener('click', () => moveCarousel(currentSlide + 1));
+setInterval(() => moveCarousel(currentSlide + 1), 6000);
+window.addEventListener('resize', () => {
+track.style.transition = 'none';
+moveCarousel(currentSlide);
+setTimeout(() => { track.style.transition = 'transform 0.5s ease-in-out'; }, 50);
+});
+
+const filterContainer = document.querySelector('.filter-container');
+filterContainer.addEventListener('click', (event) => {
+if (event.target.classList.contains('filter-btn')) {
+filterContainer.querySelector('.active').classList.remove('active');
+event.target.classList.add('active');
+const filter = event.target.dataset.filter;
+document.querySelectorAll('.grid .card-produto').forEach(card => {
+    if (filter === 'all' || card.classList.contains(filter)) {
+        card.style.display = 'flex'; 
+    } else {
+        card.style.display = 'none'; 
+    }
+});
+}
+});
+// Renderiza o carrinho ao carregar a página para o caso de ter dados salvos no futuro
+showSection('home'); // Mostra a seção inicial
+renderCart(); 
+
+const contactForm = document.querySelector('#sobre form');
+contactForm.addEventListener('submit', (event) => {
+    event.preventDefault(); 
+    successModal.style.display = 'block';
+    contactForm.reset();
+});
+});
+</script>
+</body>
+</html>
